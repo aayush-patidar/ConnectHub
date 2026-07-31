@@ -23,4 +23,26 @@ class TokenData(BaseModel):
     id:int
     email:EmailStr
 
+class NewPost(BaseModel):
+    content:str
+
+class PostRespo(BaseModel):
+    user_id:int
+    content:str
+
+class Like(BaseModel):
+    flag:int=Field(ge=0,le=1)
+    post_id:int
+
+class LikeResponse(BaseModel):
+    id: int
+    user_id: int
+    post_id: int
+
+    class Config:
+        from_attributes = True
+
+    
+
+
 
