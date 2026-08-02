@@ -19,10 +19,10 @@ class Posts(Base):
     created_at=Column(TIMESTAMP(timezone=True),nullable=False,server_default=text("now()"))
 
 class Likes(Base):
-    __tablename__="Likes"
+    __tablename__="Votes"
     id=Column(Integer,autoincrement=True,index=True,primary_key=True,nullable=False)
-    user_id=Column(Integer,ForeignKey("Users.id",ondelete="CASCADE"),nullable=False)
-    post_id=Column(Integer,ForeignKey("Posts.id",ondelete="CASCADE"),nullable=False)
+    user_id=Column(Integer,ForeignKey("Users.id",ondelete="CASCADE"),nullable=False,primary_key=True)
+    post_id=Column(Integer,ForeignKey("Posts.id",ondelete="CASCADE"),nullable=False,primary_key=True)
     created_at=Column(TIMESTAMP(timezone=True),nullable=False,server_default=text("now()"))
 
     
