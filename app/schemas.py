@@ -39,8 +39,16 @@ class LikeResponse(BaseModel):
     user_id: int
     post_id: int
 
+    
+
+
+class PostVote(BaseModel):
+    Posts: PostRespo
+    Votes: int
+
     class Config:
         from_attributes = True
+
 
     
 

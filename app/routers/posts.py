@@ -2,6 +2,7 @@ from fastapi import APIRouter,status,HTTPException,Depends
 from sqlalchemy.orm import Session
 from typing import List
 from .. import models,schemas,oauth2
+from sqlalchemy import func
 from ..database import get_db
 
 router=APIRouter(
@@ -18,13 +19,15 @@ def newPost(post:schemas.NewPost,db:Session=Depends(get_db),current=Depends(oaut
 
     return post
 
-@router.get("/",response_model=List[schemas.PostRespo])
+@router.get("/",response_model=List[schemas.PostVote])
 def get_post(db:Session=Depends(get_db),current=Depends(oauth2.get_user)):
     user=db.query(models.Posts).filter(models.Posts.user_id==current.id).all()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,detail=f"No Post Found for this {current.id}")
 
-    return user
+    result=db.query(models.Posts,func.count(models.Likes.post_id).label("Votes")).join(models.Likes,models.Likes.post_id==models.Posts.id,isouter=True).group_by(models.Posts.id).all()
+
+    return result
 
 @router.delete("/{id}")
 def del_post(id:int,db:Session=Depends(get_db),current=Depends(oauth2.get_user)):
